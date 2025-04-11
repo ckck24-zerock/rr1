@@ -1,4 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
+import {testTodoList} from "~/api/todoAPI";
 
 
 function TodoListComponent () {
@@ -8,10 +9,12 @@ function TodoListComponent () {
         queryKey: ['todos'],
         queryFn: async() => {
 
-            //2초 딜레이
+
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            return {msg: "Hello World"}
+            const todos:Todo[] = await testTodoList()
+
+            return todos
         }
     })
 
