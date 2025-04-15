@@ -89,6 +89,18 @@ function TodoAddComponent() {
                         required={true}
                     />
                 </div>
+                <div>
+                    <label htmlFor="writer" className="block text-sm font-medium text-gray-600 mb-1">
+                        첨부파일
+                    </label>
+                    <input
+                        name="file"
+                        id="writer"
+                        type="file"
+                        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-500"
+                        multiple={true}
+                    />
+                </div>
 
                 <button
                     type="submit"
