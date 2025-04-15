@@ -22,12 +22,19 @@ function TodoAddComponent() {
         if(!form) {
             return;
         }else {
-            const titleInput = form.elements.namedItem("title") as HTMLInputElement | null;
-            const writerInput = form.elements.namedItem("writer") as HTMLInputElement | null;
-            const title = titleInput?.value ?? "";
-            const writer = writerInput?.value ?? "";
 
-            addMutation.mutate({title,writer})
+            const formData = new FormData(form);
+            const title = formData.get("title") as string;
+            const writer = formData.get("writer") as string;
+
+            console.log("FormData 수집:", { title, writer });
+
+            // const titleInput = form.elements.namedItem("title") as HTMLInputElement | null;
+            // const writerInput = form.elements.namedItem("writer") as HTMLInputElement | null;
+            // const title = titleInput?.value ?? "";
+            // const writer = writerInput?.value ?? "";
+            //
+            // addMutation.mutate({title,writer})
             //old
             //testTodoAdd({title,writer})
 
