@@ -1,6 +1,8 @@
 import React, {type FormEvent, useRef} from "react";
 import {testTodoAdd, testTodoAddForm} from "~/api/todoAPI";
 import {useMutation} from "@tanstack/react-query";
+import LoadingComponent from "~/components/common/loadingComponent";
+import ResultComponent from "~/components/common/resultComponent";
 
 function TodoAddComponent() {
 
@@ -91,8 +93,10 @@ function TodoAddComponent() {
                 </button>
             </form>
 
-            {addMutation.isPending && <div className={'text-6xl bg-amber-500'}>처리중</div>}
-            {addMutation.data && <div className={'text-6xl bg-blue-500'}>처리완료</div>}
+            {addMutation.isPending && <LoadingComponent isLoading={addMutation.isPending}  />}
+            {addMutation.data && <ResultComponent msg={'등록완료'} closeFn={() => {
+
+            }}/> }
         </div>
     );
 }
