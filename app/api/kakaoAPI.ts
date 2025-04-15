@@ -15,6 +15,8 @@ export const getKakaoLoginLink = () => {
     return kakaoURL
 }
 
+
+//access token 얻기
 export const getAccessToken = async (authCode:string) => {
 
     const header = {
