@@ -8,5 +8,16 @@ export async function testTodoList(page:string, size:string) {
     const res = await axios.get(`${host}/list?page=${page}&size=${size}`);
 
     return res.data
+}
+
+export async function testTodoAdd(todo:TodoAdd) {
+
+    const res = await axios.post(host, )
 
 }
+
+
+
+
+
+
