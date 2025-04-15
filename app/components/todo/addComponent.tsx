@@ -92,6 +92,7 @@ function TodoAddComponent() {
             </form>
 
             {addMutation.isPending && <div className={'text-6xl bg-amber-500'}>처리중</div>}
+            {addMutation.data && <div className={'text-6xl bg-blue-500'}>처리완료</div>}
         </div>
     );
 }
