@@ -1,17 +1,22 @@
 import React, {type FormEvent, useRef} from "react";
 import {testTodoAdd, testTodoAddForm} from "~/api/todoAPI";
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import LoadingComponent from "~/components/common/loadingComponent";
 import ResultComponent from "~/components/common/resultComponent";
+import {useNavigate} from "react-router";
 
 function TodoAddComponent() {
 
     const formRef = useRef<HTMLFormElement | null>(null);
 
+    const query = useQueryClient();
+
+    const navigate = useNavigate();
+
     const addMutation = useMutation({
         mutationFn: testTodoAddForm,
         onSuccess: (data) => {
-            alert("SUCCESS")
+            query.invalidateQueries({queryKey: ['todos'] })
         }
     })
 
@@ -95,7 +100,7 @@ function TodoAddComponent() {
 
             {addMutation.isPending && <LoadingComponent isLoading={addMutation.isPending}  />}
             {addMutation.data && <ResultComponent msg={'등록완료'} closeFn={() => {
-
+                navigate("/todo/list")
             }}/> }
         </div>
     );
