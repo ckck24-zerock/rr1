@@ -14,7 +14,9 @@ function TodoAddComponent() {
     })
 
     const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
+
         e.preventDefault();
+
         const form = formRef.current;
 
         if(!form) {
@@ -25,6 +27,7 @@ function TodoAddComponent() {
             const title = titleInput?.value ?? "";
             const writer = writerInput?.value ?? "";
 
+            addMutation.mutate({title,writer})
             //old
             //testTodoAdd({title,writer})
 
