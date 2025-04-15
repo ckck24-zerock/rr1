@@ -25,7 +25,11 @@ export async function testTodoAddForm(formData:FormData):Promise<ActionResult<nu
     await new Promise(resolve => setTimeout(resolve, 2000));
     console.log(formData)
 
-    return {result:'success', data: 123}
+    const res = await axios.post(`${host}`, formData);
+
+    console.log(res)
+
+    return res.data
 
 }
 
