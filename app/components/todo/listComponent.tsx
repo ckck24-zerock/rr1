@@ -24,6 +24,9 @@ function TodoListComponent () {
         <div>
             <div className={'text-4xl'}>Todo List Component </div>
             <div className={'text-3xl bg-amber-600'}> {isFetching && <h1>Loading.........</h1>}</div>
+
+            {data &&  <div className={'text-2xl'}>List 출력</div>}
+
         </div>
     )
 }
