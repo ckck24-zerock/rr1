@@ -2,7 +2,7 @@ import React, {type FormEvent, useRef} from "react";
 
 function TodoAddComponent() {
 
-    const formRef = useRef(null);
+    const formRef = useRef<HTMLFormElement | null>(null);
 
     const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -11,8 +11,11 @@ function TodoAddComponent() {
         if(!form) {
 
         }else {
-            const title = form["title"];
-            const writer = form["writer"];
+            const titleInput = form.elements.namedItem("title") as HTMLInputElement | null;
+            const writerInput = form.elements.namedItem("writer") as HTMLInputElement | null;
+
+            const title = titleInput?.value ?? "";
+            const writer = writerInput?.value ?? "";
 
             console.log("입력값:", { title, writer });
         }
