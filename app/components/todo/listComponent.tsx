@@ -1,6 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {testTodoList} from "~/api/todoAPI";
-import {useSearchParams} from "react-router";
+import {Navigate, useSearchParams} from "react-router";
 
 
 function TodoListComponent () {
@@ -16,10 +16,17 @@ function TodoListComponent () {
     const query = useQuery({
         queryKey: ['todos', pageStr, sizeStr],
         queryFn: () => testTodoList(pageStr, sizeStr),
-        staleTime: 10 * 60 * 1000, //신선도 판단 기준
+        staleTime: 10 * 60 * 1000,
+        retry: false//신선도 판단 기준
     })
 
     const {isFetching, data, error } = query
+
+    if(error){
+        return(
+            <Navigate to="/member/login" replace />
+        )
+    }
 
     return (
         <div>

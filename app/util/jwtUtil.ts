@@ -8,11 +8,8 @@ const jwtAxios = axios.create()
 const beforeReq = (config: InternalAxiosRequestConfig) => {
     console.log("before request.............")
 
-    const accessToken = getCookie("access_token");
-
-    config.headers.Authorization = `Bearer ${accessToken}`;
-
-
+    const accessToken = getCookie("access_token")
+    config.headers.Authorization = `Bearer ${accessToken}`
     return config
 }
 //fail request
@@ -32,7 +29,7 @@ const beforeRes = async (res: AxiosResponse): Promise<AxiosResponse> => {
 
 //fail response
 //에러 상태 코드가 전달되었을 때 추가작업
-const responseFail = (err: AxiosError) => {
+const responseFail = async (err: AxiosError) => {
     console.log("response fail error.............")
     console.log(err)
 
@@ -54,10 +51,11 @@ async function refreshTokens(response: AxiosResponse|undefined) {
     const refreshToken = getCookie("refresh_token");
 
     //API 서버에게 토큰들을 갱신해 주세요 라고 말해 주어야 함
-    const header = {headers:
-            {'Authorization': `Bearer ${accessToken}`,'Content-Type': 'application/x-www-form-urlencoded'}
+    const header = {headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+        }
     }
-
     //새로운 accessToken과 새로운 refreshToken을 받아야 함
     const res = await axios.post(
         'http://localhost:8080/api/v1/member/refresh', {refreshToken}, header)
