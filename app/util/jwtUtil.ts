@@ -38,16 +38,20 @@ const responseFail = (err: AxiosError) => {
 
     //401 unauthorized
     if (err.status === 401) {
-        const errorObj = err.response?.data as { msg?: string }
+        const msg = getErrorMsg(err)
 
-        if (errorObj?.msg) {
-            const errorMsg: string = errorObj.msg
-            console.log("에러 메시지:", errorMsg)
-        }
     }
-
-
     return Promise.reject(err);
+}
+
+function getErrorMsg(err: AxiosError){
+    const errorObj = err.response?.data as { msg?: string }
+
+    if (errorObj?.msg) {
+        const errorMsg: string = errorObj.msg
+        console.log("에러 메시지:", errorMsg)
+        return errorMsg
+    }
 }
 
 jwtAxios.interceptors.request.use( beforeReq, requestFail )
