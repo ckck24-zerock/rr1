@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Route } from "./+types/root";
 import "./app.css";
+import {StrictMode} from "react";
 
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient();
@@ -43,10 +44,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
+      <StrictMode>
       <QueryClientProvider client={queryClient}>
         <Outlet />
         {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
+      </StrictMode>
   );
 }
 
