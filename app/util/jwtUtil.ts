@@ -42,16 +42,13 @@ const responseFail = (err: AxiosError) => {
         //msg Expired token 인 경우에는 refresh 이용해서 다시한번 시도 -- 자동으로 조용히 slient refreshing
         if(msg ==='Expired token'){
             console.log("token expired so refreshing tokens")
-
             refreshTokens(err.response)
         }
-
-        return Promise.reject(err);
     }
     return Promise.reject(err);
 }
 
-async function refreshTokens(resonse: AxiosResponse|undefined): Promise<AxiosResponse> {
+async function refreshTokens(response: AxiosResponse|undefined) {
 
     const accessToken = getCookie("access_token");
     const refreshToken = getCookie("refresh_token");
@@ -72,9 +69,6 @@ async function refreshTokens(resonse: AxiosResponse|undefined): Promise<AxiosRes
     setCookie("refresh_token", newRefreshToken, 7)
 
     // 다 됐으면 원래 호출하려고 했던 요청을 재시도
-    return await axios(resonse?.request)
-
-
 
 }
 
