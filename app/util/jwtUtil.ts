@@ -28,46 +28,64 @@ const beforeRes = async (res: AxiosResponse): Promise<AxiosResponse> => {
 }
 
 //fail response
-//에러 상태 코드가 전달되었을 때 추가작업
 const responseFail = async (err: AxiosError) => {
     console.log("response fail error.............")
     console.log(err)
 
-    //401 unauthorized
-    if (err.status === 401) {
+    // 401 unauthorized
+    if (err.response?.status === 401) {
         const msg = getErrorMsg(err)
-        //msg Expired token 인 경우에는 refresh 이용해서 다시한번 시도 -- 자동으로 조용히 slient refreshing
-        if(msg ==='Expired token'){
+
+        if (msg === 'Expired token') {
             console.log("token expired so refreshing tokens")
-            refreshTokens(err.response)
+
+            try {
+                // 토큰을 갱신한 후 원래 요청을 다시 시도
+                const newResponse = await refreshTokens(err.config)
+                return newResponse
+            } catch (refreshError) {
+                console.log("Token refresh failed", refreshError)
+            }
         }
     }
+
     return Promise.reject(err);
 }
 
-async function refreshTokens(response: AxiosResponse|undefined) {
-
+async function refreshTokens(originalConfig: AxiosRequestConfig | undefined) {
     const accessToken = getCookie("access_token");
     const refreshToken = getCookie("refresh_token");
 
-    //API 서버에게 토큰들을 갱신해 주세요 라고 말해 주어야 함
-    const header = {headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
+    const header = {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     }
-    //새로운 accessToken과 새로운 refreshToken을 받아야 함
+
+    // 토큰 갱신 요청
     const res = await axios.post(
-        'http://localhost:8080/api/v1/member/refresh', {refreshToken}, header)
+        'http://localhost:8080/api/v1/member/refresh',
+        { refreshToken },
+        header
+    )
 
     const newAccessToken = res.data[0]
     const newRefreshToken = res.data[1]
-    // 다시 쿠키로 저장
+
     setCookie("access_token", newAccessToken, 1)
     setCookie("refresh_token", newRefreshToken, 7)
 
-    // 다 됐으면 원래 호출하려고 했던 요청을 재시도
+    // 원래 요청의 Authorization 헤더를 새로운 토큰으로 수정
+    if (originalConfig) {
+        originalConfig.headers = {
+            ...originalConfig.headers,
+            Authorization: `Bearer ${newAccessToken}`,
+        }
 
+        // 원래 요청 재시도
+        return axios(originalConfig)
+    }
 }
 
 function getErrorMsg(err: AxiosError){
