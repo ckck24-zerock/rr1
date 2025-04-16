@@ -39,16 +39,39 @@ const responseFail = (err: AxiosError) => {
     //401 unauthorized
     if (err.status === 401) {
         const msg = getErrorMsg(err)
+        //msg Expired token 인 경우에는 refresh 이용해서 다시한번 시도 -- 자동으로 조용히 slient refreshing
+        if(msg ==='Expired token'){
+            console.log("token expired so refreshing tokens")
+            refreshTokens(err.config)
+        }
 
+        return Promise.reject(err);
     }
     return Promise.reject(err);
 }
 
-function getErrorMsg(err: AxiosError){
-    const errorObj = err.response?.data as { msg?: string }
+function refreshTokens(config: InternalAxiosRequestConfig|undefined) {
 
-    if (errorObj?.msg) {
-        const errorMsg: string = errorObj.msg
+    const accessToken = getCookie("access_token");
+    const refreshToken = getCookie("refresh_token");
+
+    //API 서버에게 토큰들을 갱신해 주세요 라고 말해 주어야 함
+
+    //새로운 accessToken과 새로운 refreshToken을 받아야 함
+
+    // 다시 쿠키로 저장
+
+    // 다 됐으면 원래 호출하려고 했던 요청을 재시도
+
+
+
+}
+
+function getErrorMsg(err: AxiosError){
+    const errorObj = err.response?.data as { error?: string }
+
+    if (errorObj?.error) {
+        const errorMsg: string = errorObj.error
         console.log("에러 메시지:", errorMsg)
         return errorMsg
     }
