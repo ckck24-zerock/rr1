@@ -50,15 +50,21 @@ const responseFail = (err: AxiosError) => {
     return Promise.reject(err);
 }
 
-function refreshTokens(config: InternalAxiosRequestConfig|undefined) {
+async function refreshTokens(config: InternalAxiosRequestConfig|undefined) {
 
     const accessToken = getCookie("access_token");
     const refreshToken = getCookie("refresh_token");
 
     //API 서버에게 토큰들을 갱신해 주세요 라고 말해 주어야 함
+    const header = {headers:
+            {'Authorization': `Bearer ${accessToken}`,'Content-Type': 'application/x-www-form-urlencoded'}
+    }
 
     //새로운 accessToken과 새로운 refreshToken을 받아야 함
+    const res = await axios.post(
+        'http://localhost:8080/api/v1/member/refresh', {refreshToken}, header)
 
+    console.log(res.data)
     // 다시 쿠키로 저장
 
     // 다 됐으면 원래 호출하려고 했던 요청을 재시도
