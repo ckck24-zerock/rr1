@@ -1,4 +1,6 @@
 import React, {type ChangeEvent, type FormEvent, useState} from "react";
+import {getToken} from "~/api/memberAPI";
+
 
 const LoginComponent = () => {
     const [mid, setMid] = useState("");
@@ -8,6 +10,10 @@ const LoginComponent = () => {
         e.preventDefault();
         // 여기에 로그인 로직 추가
         console.log("ID:", mid, "PW:", mpw);
+
+        getToken(mid, mpw).then((res) => {
+
+        })
     };
 
     return (

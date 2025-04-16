@@ -11,7 +11,7 @@ export const getToken = async (mid:string, mpw:string) => {
         }
     }
 
-    const res = await axios.post(`${host}`,{mid,mpw}, header);
+    const res = await axios.post(`${host}`,{uid:mid, upw:mpw}, header);
 
     console.log(res.data)
 
