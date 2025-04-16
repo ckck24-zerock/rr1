@@ -34,6 +34,19 @@ const beforeRes = async (res: AxiosResponse): Promise<AxiosResponse> => {
 //에러 상태 코드가 전달되었을 때 추가작업
 const responseFail = (err: AxiosError) => {
     console.log("response fail error.............")
+    console.log(err)
+
+    //401 unauthorized
+    if (err.status === 401) {
+        const errorObj = err.response?.data as { msg?: string }
+
+        if (errorObj?.msg) {
+            const errorMsg: string = errorObj.msg
+            console.log("에러 메시지:", errorMsg)
+        }
+    }
+
+
     return Promise.reject(err);
 }
 
